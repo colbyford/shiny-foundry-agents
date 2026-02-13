@@ -1,37 +1,44 @@
 # ------------------------------------------------------------------------------------
 # A basic Shiny Chat example powered by OpenAI running on Azure.
-# To run it, you'll need OpenAI API key.
-# To get setup, follow the instructions at https://learn.microsoft.com/en-us/azure/ai-services/openai/quickstart?tabs=command-line%2Cpython-new&pivots=programming-language-python#create-a-new-python-application
+# To run it, you'll need a deployed model and API key from Microsoft Foundry.
 # ------------------------------------------------------------------------------------
 import os
 
+# from dotenv import load_dotenv
 from app_utils import load_dotenv
-from openai import AzureOpenAI
+from openai import AzureOpenAI, OpenAI
 
 from shiny.express import ui
 
-# Either explicitly set the AZURE_OPENAI_API_KEY and AZURE_OPENAI_ENDPOINT environment
-# variables before launching the app, or set them in a file named `.env`. The
-# `python-dotenv` package will load `.env` as environment variables which can later be
-# read by `os.getenv()`.
+## Load environment variables from .env file
 load_dotenv()
 
+## Check that .env variables are set
+print("FOUNDRY_API_KEY:", os.getenv("FOUNDRY_API_KEY") is not None)
+print("FOUNDRY_ENDPOINT:", os.getenv("FOUNDRY_ENDPOINT") is not None)
+print("FOUNDRY_DEPLOYMENT_NAME:", os.getenv("FOUNDRY_DEPLOYMENT_NAME") is not None)
+
 llm = AzureOpenAI(
-    api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+    api_key=os.getenv("FOUNDRY_API_KEY"),
     api_version="2024-02-01",
-    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),  # type: ignore
+    azure_endpoint=os.getenv("FOUNDRY_ENDPOINT"),
 )
 
-deployment_name = "REPLACE_WITH_YOUR_DEPLOYMENT_NAME"
+# llm = OpenAI(
+#     base_url=os.getenv("FOUNDRY_ENDPOINT"),
+#     api_key=os.getenv("FOUNDRY_API_KEY")
+# )
 
-# Set some Shiny page options
+deployment_name = os.getenv("FOUNDRY_DEPLOYMENT_NAME")
+
+## Set some Shiny page options
 ui.page_opts(
-    title="Hello OpenAI Chat",
+    title="Welcome to Foundry Agent Chat",
     fillable=True,
     fillable_mobile=True,
 )
 
-# Create a chat instance, with an initial message
+## Create a chat instance, with an initial message
 chat = ui.Chat(
     id="chat",
     messages=[
@@ -39,20 +46,20 @@ chat = ui.Chat(
     ],
 )
 
-# Display the chat
+## Display the chat
 chat.ui()
 
 
-# Define a callback to run when the user submits a message
+## Define a callback to run when the user submits a message
 @chat.on_user_submit
 async def _():
-    # Get messages currently in the chat
+    ## Get messages currently in the chat
     messages = chat.messages(format="openai")
-    # Create a response message stream
+    ## Create a response message stream
     response = llm.chat.completions.create(
         model=deployment_name,
         messages=messages,
         stream=True,
     )
-    # Append the response stream into the chat
+    ## Append the response stream into the chat
     await chat.append_message_stream(response)
