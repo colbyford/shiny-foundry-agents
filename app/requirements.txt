@@ -2,3 +2,5 @@ shiny
 python-dotenv
 tokenizers
 openai
+azure-identity
+azure-ai-projects
