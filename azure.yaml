@@ -1,0 +1,8 @@
+name: foundry-shiny-app
+infra:
+    provider: "bicep"
+services:
+  app:
+    project: app
+    language: py
+    host: appservice
