@@ -49,7 +49,7 @@ This app will not yet have the credentials to communicate with the Foundry agent
 
 ### Grant Permissions between App and Agent
 
-Now you need to grant the web app permissions to access the Foundry agent. This is done by assigning a user assigned managed identity to the web app and then granting that identity the "Azure AI User" role at the appropriate scope.
+Now you need to grant the web app permissions to access the Foundry agent. This is done by assigning a managed identity to the web app and then granting that identity the "Azure AI User" role at the appropriate scope.
 
 First, create a user assigned managed identity for the web app. This will give you the service principal ID for the web app's managed identity.
 
