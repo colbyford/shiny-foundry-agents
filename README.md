@@ -24,7 +24,7 @@ This will open a browser tab that is pointing to [127.0.0.1:8000](127.0.0.1:8000
 
 ## Deploy the Shiny App to Azure
 
-This repo contains the basic Python app code and infrastructure code (in `.bicep` format) to deploy the Shiny app to an Azure App Service. The service is defined in the `infra/` directory, and the deployment is managed using the Azure Developer CLI (`azd`).
+This repo contains the basic Python app code and infrastructure code (in `.bicep` format) to deploy the Shiny app to an Azure App Service. The service is defined in the `infra/` directory, and the deployment is managed using the [Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd?tabs=winget-windows%2Cbrew-mac%2Cscript-linux&pivots=os-windows) (`azd`).
 
 ```bash
 ## Install the Azure Developer CLI (azd) if you haven't already
